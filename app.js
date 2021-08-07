@@ -31,14 +31,34 @@ mongoose.connect(process.env.MONGO_URL + "/ipDB", { useNewUrlParser: true });
 
 // Default Page Loading
 app.get("/", function(req, res) {
-  res.render("index", {
-    ipadd: "0.0.0.0",
-    locn: "Orlando, Florida",
-    tz: "-5:00",
-    intSP: "Example ISP",
-    latd: 28.557,
-    lngd: -81.38,
-    alertComment: "//",
+  let ipAddrs = req.headers['x-forwarded-for'];
+
+  https.get("https://geo.ipify.org/api/v1?apiKey=" + process.env.IPLOC_KEY + "&ipAddress=" + ipAddrs, function(response) {
+
+    response.on('data', function(data) {
+      const newData = JSON.parse(data);
+
+      const datum = new Datum ({
+        ipAddress: ipAddrs,
+        location: newData.location.city + ", " + newData.location.region,
+        timezone: newData.location.timezone,
+        isp: newData.isp,
+        lat: newData.location.lat,
+        lng: newData.location.lng
+      });
+
+      datum.save();
+      console.log(datum);
+
+      res.render("index", {
+        ipadd: ipAddrs,
+        locn: datum.location,
+        tz: datum.timezone,
+        intSP: datum.isp,
+        latd: datum.lat,
+        lngd: datum.lng,
+      });
+    });
   });
 });
 
@@ -73,24 +93,10 @@ app.post("/", function(req, res) {
         intSP: datum.isp,
         latd: datum.lat,
         lngd: datum.lng,
-        alertComment: "//"
       });
     }); }
 
-    else {
-
-      console.log(response.statusCode);
-
-      res.render("index", {
-        ipadd: "0.0.0.0",
-        locn: "Orlando, Florida",
-        tz: "-5:00",
-        intSP: "Example ISP",
-        latd: 28.557,
-        lngd: -81.385,
-        alertComment: ""
-      });
-    }
+    else { res.redirect("/"); }
 
   });
 });
