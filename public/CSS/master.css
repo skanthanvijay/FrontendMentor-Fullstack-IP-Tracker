@@ -71,10 +71,14 @@ input:focus {
 }
 
 .btn-submit {
-  background-color: hsl(0, 0%, 17%);
+  background-color: black;
   border-style: none;
   margin-left: 0;
   width: 10%;
+}
+
+.btn-submit:hover {
+  background-color: hsl(0, 0%, 17%);
 }
 
 
