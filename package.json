@@ -1,0 +1,24 @@
+{
+  "name": "ip-add-tracker",
+  "version": "1.0.0",
+  "description": "frontendmentor challenge",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "engines": {
+    "node": "14.17.3"
+  },
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "dotenv": "^10.0.0",
+    "ejs": "^2.6.1",
+    "envfile": "^6.17.0",
+    "express": "^4.16.3",
+    "https": "^1.0.0",
+    "lodash": "^4.17.21",
+    "mongoose": "^5.13.5"
+  }
+}
